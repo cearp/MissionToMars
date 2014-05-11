@@ -58,21 +58,56 @@ public class launchExpedition : MonoBehaviour {
 				int survivors = sent * popRet / 100;
 				gameController.GetComponent<game_controller>().ore += reward;
 				gameController.GetComponent<game_controller>().population += survivors;
-				GameObject temp = GameObject.Find("disasterText");
-				string msg = "Expedition was a success!\n You have gained " + reward.ToString() + " ore\n There were " + survivors.ToString() + " survivors";
-				temp.guiText.text = msg;
+				if(reward != 0)
+					displaySuccess(reward, survivors);
+				else if (survivors != 0)
+					displaySuccessKinda(reward, survivors);
+				else
+					displayFailure();
 			}
 			else{
-				GameObject temp = GameObject.Find("disasterText");
-				string msg = "Expedition Failed!\n There were 0 Survivors";
-				temp.guiText.text = msg;
+				displayFailure();
 			}
 
+			//All this code is used for late game mine discoveries
+			int oreFieldDiscovered = Random.Range(0, sent)/250;
+			/*GameObject terrain = GameObject.Find ("Terrain");
+			GameObject ore;
+			Instantiate (ore, diasterText_loc, Quaternion.identity);
+			int x = (int)this.transform.position.x;
+			int z = (int)this.transform.position.z;
+			x += 250;
+			z += 250;
+			for (int i = -3; i <= 0; i++)
+				for (int j = 0; j <= 2; j++)
+					terrain.GetComponent<graph> ().world [x + i, z + j].setType ("ore");
+*/
 		}
+	}
+	
+	void displaySuccess(int reward, int survivors){
+		GameObject temp = GameObject.Find("expeditionText");
+		string msg = "Expedition was a success!\n You have gained " + reward.ToString() + " ore\n There were " + survivors.ToString() + " survivors";
+		temp.guiText.text = msg;
+		gameController.GetComponent<game_controller>().expeditionDisplayTimer++; //turn expedition text timer on
+	}
+
+	void displaySuccessKinda(int reward, int survivors){
+		GameObject temp = GameObject.Find("expeditionText");
+		string msg = "Expedition was a sort of a success!\n You have gained " + reward.ToString() + " ore, but...\n There were " + survivors.ToString() + " survivors!!!";
+		temp.guiText.text = msg;
+		gameController.GetComponent<game_controller>().expeditionDisplayTimer++; //turn expedition text timer on
+	}
+
+	void displayFailure(){
+		GameObject temp = GameObject.Find("expeditionText");
+		string msg = "Expedition Failed!\n There were 0 Survivors";
+		temp.guiText.text = msg;
+		gameController.GetComponent<game_controller>().expeditionDisplayTimer++; //turn expedition text timer on
 	}
 
 	void OnMouseDown(){
-		timer = 45;
+		timer = 5;
 		sent = counter;
 		counter = 0;
 		InvokeRepeating ("countDown", 1.0f, 1.0f);

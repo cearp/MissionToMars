@@ -2,15 +2,6 @@
 using System.Collections;
 
 public class buildMenuBack : MonoBehaviour {
-
-	void Start () {
-	
-	}
-
-	void Update () {
-	
-	}
-
 	//When the back button is pressed, return the camera to its previous position
 	//re-enable movement
 	//turn the hud back on

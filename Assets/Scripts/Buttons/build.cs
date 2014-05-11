@@ -2,17 +2,6 @@
 using System.Collections;
 
 public class build : MonoBehaviour {
-
-
-
-	void Start () {
-		
-	}
-
-	void Update () {
-
-	}
-
 	//When the player goes to the build screen
 	//disable movement
 	//turn off the HUD

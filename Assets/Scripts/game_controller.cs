@@ -9,7 +9,6 @@ public class game_controller : MonoBehaviour {
 	public bool movement;
 	public bool isHud;
 	public bool overCrowd;
-	public bool isMenu;
 
 	//Camera Locations
 	public Vector3 cameraWasHere;	//Keeps track of the cameras location before it is teleported to a menu
@@ -19,11 +18,12 @@ public class game_controller : MonoBehaviour {
 	public int startTime;		//Keeps track of how long the game has been running
 	public int updateTime;		//Updates resources
 	public int disasterTime;	//Causes disasters
+	public int expeditionDisplayTimer;
 	public int collectTimer;	//Decreases resources
 	
 	//Resources
 	public int atmosphere;
-	public  int population;
+	public int population;
 	public int ore;
 	public int food;
 	public int water;
@@ -53,30 +53,32 @@ public class game_controller : MonoBehaviour {
 	public bool turboMode;		//If enabled doubles clock speed (intended for testing)
 	public float expeditionSuccessRate;
 	GameObject disasterText;
-
+	GameObject expeditionText;
+	
 	//Sets up most of the games variables
-
 	void Start () {
 		movement = true;
 		isHud = true;
 		turboMode = false;
 		disasterText = GameObject.Find("disasterText");
 		disasterText.guiText.text = " ";
+		expeditionText = GameObject.Find("expeditionText");
+		expeditionText.guiText.text = " ";
 
 		
 		//Initializing starting values
 		startTime = 0;
 		updateTime = 0;
 		disasterTime = 0;
+		expeditionDisplayTimer = -1;
 		collectTimer = 0;
 		atmosphere = 0;
-
-
+		population = 10;
 		ore = 0;
-
+		food = 0;
+		water = 0;
 		maxPopulation = 50;
 		expeditionSuccessRate = 0.5f;
-		Invoke ("getCarry", 0.1f);
 		
 		//Initializing Increase Rates
 		atmosphereGrow = 1f;
@@ -108,15 +110,15 @@ public class game_controller : MonoBehaviour {
 		explorebases = carry.GetComponent<dataCarry>().explorebases;
 		mirrorsatellites = carry.GetComponent<dataCarry>().mirrorsatellites;
 		researchcenters = carry.GetComponent<dataCarry>().researchcenters;
-
+		
 	}
 	
 	void Update () {
 
 		//Checking for End Conditions
-		if (atmosphere == 1000)
+		if (atmosphere >= 1000)
 			youWin ();
-		if (population == 0 && startTime > 3)
+		if (population <= 0)
 			gameOver ();
 		//Checks for overcrowding
 		if(population >  maxPopulation)
@@ -124,8 +126,14 @@ public class game_controller : MonoBehaviour {
 		else{overCrowd = false;}
 		
 		//Removes DisasterText from the screen after a certain amount of time has passed
-		if (disasterText.guiText.text != " " && disasterTime > 10 && !isMenu) 
+		if (disasterText.guiText.text != " " && disasterTime > 10) 
 			disasterText.guiText.text = " ";
+
+		//Removes ExpeditionText from the screen after a certain amount of time has passed
+		if (expeditionText.guiText.text != " " && expeditionDisplayTimer > 5) {
+			expeditionText.guiText.text = " ";
+			expeditionDisplayTimer = -1;
+		}
 		
 		
 		//Updates resources
@@ -138,8 +146,8 @@ public class game_controller : MonoBehaviour {
 			
 			//Accounts for overcrowding
 			if(overCrowd){
-				food += (int)(food / 3);
-				water += (int)(water / 3);
+				food += (int)(foodGrow / 3);
+				water += (int)(waterGrow / 3);
 			}
 			else{
 				food += (int)foodGrow;
@@ -158,6 +166,7 @@ public class game_controller : MonoBehaviour {
 		
 		//Collects Upkeep resources
 		if(collectTimer >= 60){
+			collectTimer = 0;
 			food -= population;
 			water -= population;
 			if(food < 0){
@@ -172,7 +181,6 @@ public class game_controller : MonoBehaviour {
 		
 		
 	}
-
 	//Determines and executes a disaster
 	void disasterStrikes(){
 		//Creating the splash screen
@@ -225,19 +233,19 @@ public class game_controller : MonoBehaviour {
 	
 	//Handles the timers
 	void tick(){
-		if(!isMenu){
+		startTime++;
+		updateTime++;
+		disasterTime++;
+		if(expeditionDisplayTimer >= 0) //If expedition text is turned on
+			expeditionDisplayTimer++;
+		collectTimer++;
+		//Turbo mode
+		if(turboMode){
 			startTime++;
 			updateTime++;
 			disasterTime++;
+			expeditionDisplayTimer++;
 			collectTimer++;
-			//Turbo mode
-			if(turboMode){
-				startTime++;
-				updateTime++;
-				disasterTime++;
-				collectTimer++;
-			}
 		}
 	}
-
 }

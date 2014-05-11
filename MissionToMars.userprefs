@@ -1,13 +1,6 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\dont_destroy.cs">
-    <Files>
-      <File FileName="Assets\Scripts\Menu.cs" Line="28" Column="35" />
-      <File FileName="Assets\Scripts\GUIStuff\HUD_Controller.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\game_controller.cs" Line="150" Column="1" />
-      <File FileName="Assets\Scripts\dont_destroy.cs" Line="17" Column="3" />
-    </Files>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -4,16 +4,7 @@ using System.Collections;
 public class buyBuilding : MonoBehaviour {
 	public GameObject building;
 	public int id;
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-	
+
 	void OnMouseDown(){
 		int temp = 0;
 		GameObject gameController = GameObject.Find ("Game_Controller");
